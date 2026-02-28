@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int LHA(vector<int>& mat){
+        int n = mat.size();
+        stack<int> st;
+        int maxArea = 0; // safer than INT_MIN
+        int nse, pse;
+        
+        for(int i = 0; i < n; i++){
+            while(!st.empty() && mat[st.top()] > mat[i]){
+                int element = st.top();
+                st.pop();
+                nse = i;
+                pse = st.empty() ? -1 : st.top();
+                int currArea = mat[element] * (nse - pse - 1);
+                maxArea = max(maxArea, currArea);
+            }
+            st.push(i);
+        }
+        
+        while(!st.empty()){
+            int element = st.top();
+            st.pop();
+            nse = n;
+            pse = st.empty() ? -1 : st.top();
+            int currArea = mat[element] * (nse - pse - 1);
+            maxArea = max(maxArea, currArea);
+        }
+        
+        return maxArea;
+    }
+    
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return 0;
+        
+        int numOfRows = matrix.size();
+        int numOfCols = matrix[0].size();
+        vector<int> height(numOfCols, 0); // histogram heights
+        int maxRect = 0;
+        
+        for(int i = 0; i < numOfRows; i++){
+            for(int j = 0; j < numOfCols; j++){
+                if(matrix[i][j] == '1'){
+                    height[j] += 1;
+                } else {
+                    height[j] = 0;
+                }
+            }
+            maxRect = max(maxRect, LHA(height));
+        }
+        
+        return maxRect;
+    }
+};
