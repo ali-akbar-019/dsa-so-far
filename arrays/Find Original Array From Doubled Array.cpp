@@ -1,41 +1,82 @@
+/*
+═══════════════════════════════════════════════════════════════════════
+PROBLEM: Find Original Array From Doubled Array (LeetCode 2007)
+═══════════════════════════════════════════════════════════════════════
+
+PROBLEM STATEMENT:
+  Given array `changed` where each element x from original array appears as x and 2*x.
+  Reconstruct the original array. If impossible, return empty array.
+  Example: [4,1,3,6] → [2,1,3] (original doubled: [2→4, 1→2, 3→6])
+
+ALGORITHM: Greedy Matching with HashMap
+  STEP 1: Check if array size is even (must have pairs)
+  STEP 2: Store frequency of each element in HashMap
+  STEP 3: Sort array to process smallest elements first (greedy)
+  STEP 4: For each element, check if its double exists
+          - If exists, add to answer and decrement both frequencies
+          - If not exists, return empty (impossible)
+  STEP 5: Return original array
+
+TIME COMPLEXITY: O(n log n) - dominated by sorting
+SPACE COMPLEXITY: O(n) - HashMap storage
+
+KEY INSIGHT: Greedy approach works: always pair smallest available element
+with its double. This minimizes conflicts.
+
+═══════════════════════════════════════════════════════════════════════
+*/
+
 class Solution
 {
 public:
     vector<int> findOriginalArray(vector<int> &changed)
     {
-        // first map me sab dal do
-        unordered_map<int, int> mp;
+        // STEP 1: Check if array size is even (each original has 2 elements)
         int n = changed.size();
         if (n % 2 == 1)
         {
-            return {};
+            return {}; // Impossible - odd sized array
         }
+
+        // STEP 2: Store frequency of each element
+        unordered_map<int, int> frequency;
         for (int &num : changed)
         {
-            mp[num]++;
+            frequency[num]++;
         }
-        // now sort kar do array ko
+
+        // STEP 3: Sort array to process smallest elements first (greedy)
         sort(changed.begin(), changed.end());
-        // ans array
-        vector<int> ans;
-        // now check karo har aik pe jaa k k us ka twice present ha k nai
+
+        // Result array for original elements
+        vector<int> result;
+
+        // STEP 4: Process each element
         for (int &num : changed)
         {
-            int twice = num * 2;
-            if (mp[num] == 0)
+            // If this element is already used (frequency = 0), skip it
+            if (frequency[num] == 0)
             {
                 continue;
             }
-            //
-            if (mp.find(twice) == mp.end() || mp[twice] == 0)
+
+            // Check if double of this element exists
+            int doubled = num * 2;
+
+            // If double doesn't exist or already used, impossible
+            if (frequency.find(doubled) == frequency.end() || frequency[doubled] == 0)
             {
-                return {};
+                return {}; // Cannot form original array
             }
-            // else ans me daal do ,q k is ka twice present ha
-            ans.push_back(num);
-            mp[num]--;
-            mp[twice]--;
+
+            // Add this element to original array
+            result.push_back(num);
+
+            // Decrement frequencies (mark as used)
+            frequency[num]--;
+            frequency[doubled]--;
         }
-        return ans;
+
+        return result;
     }
 };
