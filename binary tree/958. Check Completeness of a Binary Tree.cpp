@@ -11,23 +11,21 @@
  */
 /*
 ═══════════════════════════════════════════════════════════════════════
-PROBLEM: Check Completeness of a Binary Tree (LeetCode 958)
+🌳 COMPLETE BINARY TREE CHECK (LeetCode 958)
 ═══════════════════════════════════════════════════════════════════════
 
-PROBLEM STATEMENT:
-  A COMPLETE BINARY TREE has all levels fully filled except possibly the last level,
-  which is filled from LEFT TO RIGHT. Determine if given tree is complete.
+📝 MEIN KAISE KIYA:
+  Complete tree matlab = sare levels fully filled hote hain EXCEPT last level
+  Last level LEFT-TO-RIGHT se filled hota hai
 
-ALGORITHM: Level-Order BFS with NULL Detection
-  - Use queue for level-order traversal
-  - Push BOTH children (including NULLs) to detect gaps
-  - Once we see a NULL, if we find any non-NULL after it → NOT complete
-  - This captures gaps in last level
+  Strategy: BFS + NULL detection
+  • Queue me dono children add karo (NULL bhi)
+  • Agar NULL dekha to flag set kar do
+  • Agar phir se non-NULL dekha to gap hai = NOT complete
+  • Agar sirf NULL hi dekhe phir to complete hai
 
-TIME COMPLEXITY: O(n) - visit each node once
-SPACE COMPLEXITY: O(w) - w = max width at any level
-
-KEY INSIGHT: If tree is complete, once NULLs appear, only NULLs should follow.
+⏱️ TIME: O(n) - har node ek baar
+💾 SPACE: O(w) - w = max width
 
 ═══════════════════════════════════════════════════════════════════════
 */
@@ -35,50 +33,49 @@ KEY INSIGHT: If tree is complete, once NULLs appear, only NULLs should follow.
 class Solution
 {
 public:
-    // Check if binary tree is complete using Level-Order BFS
+    // 🔍 BFS se check karo k tree complete hai ya nahi
     bool isCompleteTree(TreeNode *root)
     {
-        // EDGE CASE: Empty tree is complete
         if (root == NULL)
         {
             return true;
         }
 
-        queue<TreeNode *> q; // Queue for BFS
+        queue<TreeNode *> q;
         q.push(root);
-        bool nullNodeFound = false; // Flag: have we started seeing NULLs?
+        bool nullNodeFound = false; // Flag: NULL dekha?
 
-        // STEP 1: Process all nodes in queue (level-order traversal)
+        // 🔄 Level-order traversal shuru karo
         while (!q.empty())
         {
             TreeNode *node = q.front();
             q.pop();
 
-            // CASE 1: Current node is NULL
+            // Case 1: Current node NULL hai
             if (node == NULL)
             {
-                // Mark that we've encountered a NULL (gap/end of level starting)
+                // NULL dekh liya, ab sirf NULL hi should aaye
                 nullNodeFound = true;
             }
-            // CASE 2: Current node is NOT NULL
+            // Case 2: Current node NULL nahi hai
             else
             {
-                // If we've already seen NULL but now found non-NULL node
-                // This means there's a GAP in the tree
+                // ⚠️ Agar NULL pehle dekha tha aur phir non-NULL dekha?
+                // Yeh gap hai = NOT COMPLETE
                 if (nullNodeFound == true)
                 {
-                    return false; // NOT COMPLETE - gap found
+                    return false;
                 }
 
-                // Add both children to queue (including NULLs)
-                // This allows us to detect any gaps in next levels
+                // 1️⃣ Dono children (NULL bhi) queue me dalo
+                // Taakay next levels me gaps detect ho sake
                 q.push(node->left);
                 q.push(node->right);
             }
         }
 
-        // STEP 2: If we exit loop without finding gaps, tree is complete
-        return true; // COMPLETE
+        // ✅ Koi gap nahi mila to tree complete hai
+        return true;
     }
 };
 

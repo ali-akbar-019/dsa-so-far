@@ -9,24 +9,17 @@
  */
 /*
 ═══════════════════════════════════════════════════════════════════════
-PROBLEM: Lowest Common Ancestor of a Binary Tree (LeetCode 236)
+🌳 LCA (Lowest Common Ancestor) - LC 236
 ═══════════════════════════════════════════════════════════════════════
 
-PROBLEM STATEMENT:
-  Given two nodes p and q in a binary tree, find their LOWEST COMMON ANCESTOR (LCA).
-  LCA is the deepest node that is ancestor of both p and q.
+📝 MEIN KAISE KIYA (Post-order Bottom-Up DFS):
+  • Left aur right subtree me p, q ko dhundho recursively
+  • Agar dono sides se non-null aye = LCA is current node (different subtrees me hain)
+  • Agar sirf ek side se aye = LCA us side me he hai
+  • Post-order = children process karo phir parent (deepest LCA milta hai)
 
-ALGORITHM: Post-order DFS (Bottom-Up Approach)
-  - Recursively search in left and right subtrees
-  - BASE CASE: If we find p or q, return it
-  - If both left and right return non-null → current node is LCA (p and q in different subtrees)
-  - If only one side returns non-null → LCA is on that side (both p and q are there)
-
-KEY INSIGHT: Post-order traversal (process children, then parent) ensures we find
-the DEEPEST common ancestor.
-
-TIME COMPLEXITY: O(n) - visit each node one time
-SPACE COMPLEXITY: O(h) - recursion stack, h = height (O(n) for skewed tree)
+⏱️ TIME: O(n)
+💾 SPACE: O(h) recursion stack
 
 ═══════════════════════════════════════════════════════════════════════
 */
@@ -34,50 +27,46 @@ SPACE COMPLEXITY: O(h) - recursion stack, h = height (O(n) for skewed tree)
 class Solution
 {
 public:
-    // Recursive function to find Lowest Common Ancestor
-    // root: current node being processed
-    // p, q: two target nodes whose LCA we need to find
+    // 🔍 P aur Q ka LCA find karo recursively
     TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
     {
-        // BASE CASE 1: If reach null, no node exists here
+        // Base Case 1: Null node
         if (root == NULL)
         {
             return NULL;
         }
 
-        // BASE CASE 2: If current node matches p or q, return it
-        // It could be the LCA (or on the path to LCA)
+        // Base Case 2: Agar current node p ya q hai
+        // Yeh LCA ho sakta hai ya path par hai
         if (root == p || root == q)
         {
             return root;
         }
 
-        // STEP 1: Search in LEFT subtree for p and q (Post-order: process children first)
+        // 🌳 Left subtree me dhundho (Post-order: pehle children, phir parent)
         TreeNode *leftAns = lowestCommonAncestor(root->left, p, q);
 
-        // STEP 2: Search in RIGHT subtree for p and q
+        // 🌳 Right subtree me dhundho
         TreeNode *rightAns = lowestCommonAncestor(root->right, p, q);
 
-        // STEP 3: Analyze results and determine LCA
+        // 🔌 Ab decide karo k LCA kaunsa node hai
 
-        // CASE 1: Both left and right return non-null
-        // Means p is in left subtree and q is in right subtree (or vice versa)
-        // Therefore current node is their LCA
+        // Case 1: Dono sides se non-null aye
+        // Matlab p left me, q right me (ya opposite)
+        // To current node hi LCA hai
         if (leftAns != NULL && rightAns != NULL)
         {
             return root;
         }
 
-        // CASE 2: Only left returns non-null
-        // Both p and q must be in left subtree (or one of them was found)
-        // LCA is on the left side
+        // Case 2: Sirf left side se mil gaya
+        // Matlab both p aur q left side me hain (ya result in left)
         if (leftAns == NULL)
         {
-            return rightAns; // Could be null or have the LCA
+            return rightAns; // Right se answer return karo (ya null)
         }
 
-        // CASE 3: Only right returns non-null
-        // Both p and q are on the left side
-        return leftAns; // LCA is already in left result
-    }
-};
+        // Case 3: Sirf right side se mil gaya
+        // Matlab dono left side me hain
+        return leftAns; // Left se answer return karo
+    };

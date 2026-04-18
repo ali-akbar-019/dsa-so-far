@@ -11,24 +11,20 @@
  */
 /*
 ═══════════════════════════════════════════════════════════════════════
-PROBLEM: Construct Binary Tree from Preorder and Inorder Traversal (LC 105)
+🌳 PROBLEM: Preorder aur Inorder se Tree banao (LC 105)
 ═══════════════════════════════════════════════════════════════════════
 
-PROBLEM STATEMENT:
-  Given preorder and inorder traversals of a binary tree, reconstruct the actual tree.
+📝 MEIN KAISE KIYA:
+  • Preorder traveral ka pehla element HAMESHA root hota hai
+  • Inorder me root ke left me left subtree, right me right subtree hote hain
+  • Strategy: Recursion se divide karo:
+    1. Preorder se root nikalo
+    2. Inorder me us root ki position find karo
+    3. Left wale nodes se left subtree banao
+    4. Right wale nodes se right subtree banao
 
-ALGORITHM: Recursive Divide & Conquer
-  - Preorder: First element is always the ROOT (Node-Left-Right order)
-  - Inorder: Elements LEFT of root are in LEFT subtree, RIGHT are in RIGHT subtree
-  - Strategy:
-    1. Take first element from preorder as root
-    2. Find this element's position in inorder
-    3. Left of position = left subtree nodes, Right = right subtree nodes
-    4. Recursively build left and right subtrees
-
-TIME COMPLEXITY: O(n²) worst case (finding element position is O(n) per level)
-SPACE COMPLEXITY: O(n) for recursion stack + tree nodes
-OPTIMIZATION: Use HashMap for O(n log n) - store inorder positions
+⏱️ TIME: O(n²) worst case (har level par linear search)
+💾 SPACE: O(n) recursion stack + tree nodes
 
 ═══════════════════════════════════════════════════════════════════════
 */

@@ -12,34 +12,41 @@
 class Solution
 {
 public:
-    vector<vector<int>> ans;
+    vector<vector<int>> ans; // 📋 Sare valid paths yahan store honge
+
+    // 🎯 DFS + Backtracking approach
     void solve(TreeNode *root, int targetSum, vector<int> &temp, int sum)
     {
         if (root == NULL)
         {
             return;
         }
-        // sum me add karo
+
+        // 1️⃣ Current node ke value ko sum me add karo
         sum += root->val;
-        // jab sum me dal deya ha to ans me b dal do
+        // Current node ko path me add karo
         temp.push_back(root->val);
-        //
-        // agar to root node tk pohanch gaye ha then check karo k sum kahi target sum k eq to nai ho gai
+
+        // 2️⃣ Agar leaf node pk pohach gaye toh check karo
         if (root->left == NULL && root->right == NULL)
         {
+            // Agar sum match karaya toh valid path hai
             if (sum == targetSum)
             {
                 ans.push_back(temp);
             }
+            // Backtrack - isi path ko undo kar do
             temp.pop_back();
             return;
         }
-        //
+
+        // 3️⃣ Left aur right dono subtree explore karo
         solve(root->left, targetSum, temp, sum);
         solve(root->right, targetSum, temp, sum);
-        // back track q k agar ans na equal huwa to remove kar jao
+        // Backtrack - agar match nahi hua toh is node ko remove kar do
         temp.pop_back();
     }
+
     vector<vector<int>> pathSum(TreeNode *root, int targetSum)
     {
         vector<int> temp;
