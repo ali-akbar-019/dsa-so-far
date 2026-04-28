@@ -1,4 +1,5 @@
-class Solution {
+class Solution
+{
 public:
     int m, n;
 
@@ -8,23 +9,27 @@ public:
         {3, {{0, -1}, {1, 0}}},
         {4, {{0, 1}, {1, 0}}},
         {5, {{0, -1}, {-1, 0}}},
-        {6, {{-1, 0}, {0, 1}}}
-    };
+        {6, {{-1, 0}, {0, 1}}}};
 
-    bool solve(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j) {
-        if (i == m - 1 && j == n - 1) return true;
+    bool solve(vector<vector<int>> &grid, vector<vector<bool>> &visited, int i, int j)
+    {
+        if (i == m - 1 && j == n - 1)
+            return true;
 
         visited[i][j] = true;
 
-        for (auto &dir : directions[grid[i][j]]) {
+        for (auto &dir : directions[grid[i][j]])
+        {
             int new_i = i + dir[0];
             int new_j = j + dir[1];
 
             if (new_i < 0 || new_i >= m || new_j < 0 || new_j >= n || visited[new_i][new_j])
                 continue;
 
-            for (auto &backDir : directions[grid[new_i][new_j]]) {
-                if (new_i + backDir[0] == i && new_j + backDir[1] == j) {
+            for (auto &backDir : directions[grid[new_i][new_j]])
+            {
+                if (new_i + backDir[0] == i && new_j + backDir[1] == j)
+                {
                     if (solve(grid, visited, new_i, new_j))
                         return true;
                 }
@@ -33,7 +38,8 @@ public:
         return false;
     }
 
-    bool hasValidPath(vector<vector<int>>& grid) {
+    bool hasValidPath(vector<vector<int>> &grid)
+    {
         m = grid.size();
         n = grid[0].size();
 
