@@ -12,16 +12,21 @@
 class Solution
 {
 public:
+    // Logic: Postorder ka last element root hai
+    // Inorder me root find karo - left side = left subtree, right side = right subtree
+    // Recursively left aur right subtrees banao
     TreeNode *solve(vector<int> &inorder, vector<int> &postorder, int inStart, int inEnd, int postStart, int postEnd)
     {
+        // Base case: agar range invalid hai to NULL return karo
         if (inStart > inEnd || postStart > postEnd)
         {
             return NULL;
         }
-        //
-        // last node of the postorder is the first node
+
+        // Postorder ka last element root hai
         TreeNode *root = new TreeNode(postorder[postEnd]);
-        // find in the inorder array
+
+        // Inorder me root find karo
         int i = inStart;
         for (; i <= inEnd; i++)
         {
@@ -30,10 +35,12 @@ public:
                 break;
             }
         }
-        // now
+
+        // Left subtree ka size calculate karo
         int leftSize = i - inStart;
         int rightSize = inEnd - i;
-        // left and right
+
+        // Recursively left aur right subtrees banao
         root->left = solve(inorder, postorder, inStart, i - 1, postStart, postStart + leftSize - 1);
         root->right = solve(inorder, postorder, i + 1, inEnd, postEnd - rightSize, postEnd - 1);
         return root;

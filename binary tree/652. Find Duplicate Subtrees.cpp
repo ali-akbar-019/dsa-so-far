@@ -12,21 +12,26 @@
 class Solution
 {
 public:
-    // this func will conver the tree to string and check one by one k already deakha ha is ko k nahi
+    // Logic: Har subtree ko string me convert karo
+    // Map me check karo - agar pehli baar dekha to count=1, dosri baar to result me add karo
     string solve(TreeNode *root, vector<TreeNode *> &res, unordered_map<string, int> &mp)
     {
         if (root == NULL)
         {
-            return "N";
+            return "N"; // Null node ka representation
         }
-        //
+
+        // Current subtree ko string me represent karo (serialization)
+        // Format: node_value,left_subtree,right_subtree
         string current_subtree = to_string(root->val) + "," + solve(root->left, res, mp) + "," + solve(root->right, res, mp);
+
+        // Agar dusri baar dekh rahe ho ye subtree, to result me add karo
         if (mp[current_subtree] == 1)
         {
-            // means we have already seen it
-            res.push_back(root);
+            res.push_back(root); // Duplicate subtree ka root node
         }
-        //
+
+        // Frequency increment karo
         mp[current_subtree]++;
         return current_subtree;
     }

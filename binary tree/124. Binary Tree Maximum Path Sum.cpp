@@ -20,19 +20,26 @@ public:
         {
             return 0;
         }
-        // aik kaam karo tm sum nikal lao left and right ka
+
+        // Recursively left aur right subtree ka max sum nikalo
         int leftSum = solve(root->left);
         int rightSum = solve(root->right);
-        // ab tm ye teen conditions deko
-        // ya to tmhe neeche hi acha sa answer mil gaya ha to tmhe ise return karne ki b need nahi ha
+
+        // 4 possibilities hain path ke liye:
+        // 1. Left aur right dono ko include karo
         int neeche_hi_acha = root->val + leftSum + rightSum;
-        // neche left side ya right side me se kisi aik se tmeh acha answer araha ha q k dosri side pe -ve values ho gi
+
+        // 2. Left ya right me se koi aik le lo + current node (negative avoid karne ke liye)
         int kisi_aik_side = max(leftSum, rightSum) + root->val;
-        // root ki hi value theek ha bs baqi ki nahi theek
+
+        // 3. Sirf current node hi lo
         int sirf_root_acha = root->val;
+
+        // Global maximum ko update karo
         maxSum = max({maxSum, neeche_hi_acha, kisi_aik_side, sirf_root_acha});
 
-        return max(sirf_root_acha, kisi_aik_side); // neche solution acha ham ne pakka pakka maan lea the to us ko oper return karne ki zarorat nahi q k fir oper b explore ho ga.
+        // Return karo sirf wo path jo oper jaega (not both sides, only one side + current)
+        return max(sirf_root_acha, kisi_aik_side);
     }
     int maxPathSum(TreeNode *root)
     {
