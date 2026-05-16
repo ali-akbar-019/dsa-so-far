@@ -72,3 +72,57 @@ public:
         return mins - 1;
     }
 };
+
+// DFS HEIGHT METHOD
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    int time = 0;
+    int DFSHeightMethod(TreeNode *root, int start)
+    {
+        if (root == NULL)
+        {
+            return 0;
+        }
+        //
+        // bhaiya tm left or right height nikal lo
+        int LSH = DFSHeightMethod(root->left, start);
+        int RSH = DFSHeightMethod(root->right, start);
+        // check karo k start pe pohanch gaye ham?
+        if (root->val == start)
+        {
+            time = max(LSH, RSH); // neche ka apna max height bej do
+            return -1;
+        }
+        else if (LSH >= 0 && RSH >= 0)
+        {
+            return max(LSH, RSH) + 1; // simple height calculation wala formula ha
+        }
+        else
+        {
+            // koi aik negative ho ga
+            int d = abs(LSH) + abs(RSH);
+            time = max(time, d);
+            return min(LSH, RSH) - 1; // aik or -1 dal do ta k wo ad ho jaye pechle minus me and return kar do
+        }
+        // ye case nahi reach ho ga wese b
+        return 0;
+    }
+    int amountOfTime(TreeNode *root, int start)
+    {
+        // doing it with the DFS
+        DFSHeightMethod(root, start);
+        return time;
+    }
+};
