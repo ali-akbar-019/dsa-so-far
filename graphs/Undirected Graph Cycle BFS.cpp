@@ -1,19 +1,27 @@
 class Solution
 {
 public:
-    bool isCycleDFS(int u, int parent, unordered_map<int, vector<int>> &adj, vector<bool> &visited)
+    bool isCycleBFS(int u, unordered_map<int, vector<int>> &adj, vector<bool> &visited)
     {
+        queue<pair<int, int>> que;
+        que.push({u, -1});
         visited[u] = true;
-        //
-        for (auto &v : adj[u])
+        while (!que.empty())
         {
-            if (v == parent)
-                continue;
-            if (visited[v])
-                return true;
-            if (!visited[v] && isCycleDFS(v, u, adj, visited))
+            pair<int, int> P = que.front();
+            que.pop();
+            int source = P.first;
+            int parent = P.second;
+            //
+            for (auto &v : adj[source])
             {
-                return true;
+                if (!visited[v])
+                {
+                    visited[v] = true;
+                    que.push({v, source});
+                }
+                else if (v != parent)
+                    return true;
             }
         }
         return false;
@@ -33,7 +41,7 @@ public:
         for (int i = 0; i < V; i++)
         {
             // q k koi node agar alag ho then sari nodes pe check karo
-            if (!visited[i] && isCycleDFS(i, -1, adj, visited))
+            if (!visited[i] && isCycleBFS(i, adj, visited))
             {
                 return true;
             }
